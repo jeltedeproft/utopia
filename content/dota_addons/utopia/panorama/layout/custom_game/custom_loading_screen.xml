@@ -1,0 +1,13 @@
+<root> 
+  <styles>
+    <include src="file://{resources}/styles/custom_loading_screen.css" />
+  </styles>
+  <Panel>
+    <Panel id="TitlePanel"> 
+      <Label id="AddonTitle" text="#addon_game_name" style=""/>
+    </Panel>
+    <Panel>
+      <Image id="bgimage" src="file://{images}/custom_game/loading_screen/goofy3.jpg" scaling="stretch"/>
+    </Panel>
+  </Panel>
+</root>

@@ -1,0 +1,1420 @@
+
+// Dota Abilities Override File
+"DOTAAbilities"
+{
+  "Version"   "1"
+
+  "containers_lua_targeting"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+    "AbilityUnitTargetTeam"     "DOTA_UNIT_TARGET_TEAM_BOTH"
+    //"AbilityUnitTargetType"     "DOTA_UNIT_TARGET_ALL"
+    "AbilityUnitTargetType"     "DOTA_UNIT_TARGET_ALL"
+    "AbilityUnitDamageType"     "DAMAGE_TYPE_MAGICAL" 
+    "BaseClass"         "ability_lua"
+    "AbilityTextureName"        "rubick_empty1"
+    "ScriptFile"          "libraries/abilities/containers_lua_targeting"
+    "MaxLevel"            "1"
+    "IsCastableWhileHidden" "1"
+    
+    // Casting
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "0"
+    "AbilityCastPoint"        "0.0"
+
+    // Time   
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCooldown"       "0"
+
+    // Cost
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "0 0 0 0"
+  }
+
+  "containers_lua_targeting_tree"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+    "AbilityUnitTargetTeam"     "DOTA_UNIT_TARGET_TEAM_BOTH"
+    //"AbilityUnitTargetType"     "DOTA_UNIT_TARGET_ALL"
+    "AbilityUnitTargetType"     "DOTA_UNIT_TARGET_ALL | DOTA_UNIT_TARGET_TREE"
+    "AbilityUnitDamageType"     "DAMAGE_TYPE_MAGICAL" 
+    "BaseClass"         "ability_lua"
+    "AbilityTextureName"        "rubick_empty1"
+    "ScriptFile"          "libraries/abilities/containers_lua_targeting_tree"
+    "MaxLevel"            "1"
+    "IsCastableWhileHidden" "1"
+    
+    // Casting
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "0"
+    "AbilityCastPoint"        "0.0"
+
+    // Time   
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCooldown"       "0"
+
+    // Cost
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "0 0 0 0"
+  }
+  
+  "example_ability"
+  {
+    "ID"              "1852"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"      "holdout_blade_fury"
+
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "1000"
+    "AbilityCastPoint"        "0.0"
+    "AbilityCooldown"       "10.0"
+    "AbilityChannelTime"      "2.0 1.8 1.6 1.5"
+    "AbilityUnitDamageType"     "DAMAGE_TYPE_PURE"
+    "AbilityCastAnimation"      "ACT_DOTA_DISABLED"
+    "AbilityDamage"         "400 600 800 1000"
+    
+    "precache"
+    {
+      "particle"          "particles/econ/generic/generic_aoe_explosion_sphere_1/generic_aoe_explosion_sphere_1.vpcf"
+      "soundfile"         "soundevents/game_sounds_heroes/game_sounds_gyrocopter.vsndevts"
+    }
+
+    // Item Info
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "300"
+    "SideShop"            "1"
+    
+    "OnSpellStart"
+    {
+      "ApplyModifier"
+      {
+        "Target"    "CASTER"
+        "ModifierName"  "modifier_channel_start"
+      }
+      "FireSound"
+      {
+        "EffectName"    "Hero_Gyrocopter.CallDown.Fire"
+        "Target"      "CASTER"
+      }
+    }
+    
+    "OnChannelSucceeded"
+    {
+      "RemoveModifier"
+      {
+        "Target"        "CASTER"
+        "ModifierName"      "modifier_channel_start"
+      }
+      "AttachEffect"
+      {
+        "EffectName"      "particles/econ/generic/generic_aoe_explosion_sphere_1/generic_aoe_explosion_sphere_1.vpcf"
+        "EffectAttachType"    "follow_origin"
+        "EffectRadius"      "%radius"
+        "EffectDurationScale" "1"
+        "EffectLifeDurationScale" "1"
+        "EffectColorA"      "255 0 0"
+        "EffectColorB"      "255 0 0"
+        "Target"      "CASTER"
+      }
+      
+      "Damage"
+      {
+        "Type"          "DAMAGE_TYPE_PURE"
+        "Damage"        "%damage"
+        "Target"
+        {
+          "Center"      "CASTER"
+          "Radius"      "%radius"
+          "Teams"       "DOTA_UNIT_TARGET_TEAM_ENEMY"
+          "Types"       "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+        }
+      }
+      
+      "Knockback"
+      {
+        "Center"  "CASTER"
+        "Target"
+        {
+          "Center"  "CASTER"
+          "Radius"  "%radius"
+          "Teams"   "DOTA_UNIT_TARGET_TEAM_ENEMY"
+        }
+        "Duration"  "%duration"
+        "Distance"  "%distance"
+        "Height"  "%height"
+      }
+      
+      "FireSound"
+      {
+        "EffectName"    "Hero_Gyrocopter.CallDown.Damage"
+        "Target"      "CASTER"
+      }
+    }
+    
+    "OnChannelFinish"
+    {
+      "RemoveModifier"
+      {
+        "Target"        "CASTER"
+        "ModifierName"      "modifier_channel_start"
+      }
+    }
+    
+    "OnChannelInterrupted"
+    {
+      "RemoveModifier"
+      {
+        "Target"    "CASTER"
+        "ModifierName"  "modifier_channel_start"
+      }
+    }
+    
+    "Modifiers"
+    {
+      "modifier_channel_start"
+      {
+        "OnCreated"
+        {
+          "AttachEffect"
+          {
+            "IsHidden" "1"
+            "EffectName"    "particles/test_particle/channel_field_2.vpcf"//"gyro_calldown_marker_c"//"gyrocopter_call_down"
+            "EffectAttachType"  "follow_origin"
+            "Target"      "CASTER"
+            
+            "EffectRadius"      "%radius"
+            "EffectColorA"      "255 0 0"
+            "EffectColorB"      "255 0 0"
+          
+            "ControlPoints"
+            {
+              "00"    "50 100 5"
+            }
+          }
+        }
+      }
+    }
+    
+    // Special  
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"        "FIELD_FLOAT"
+        "duration"        "0.5"
+      }
+      
+      "02"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "damage"        "400 600 800 1000"
+      }
+      
+      "03"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "radius"        "550 550 600 650"
+      }
+      
+      "04"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "distance"        "400 500 600 700"
+      }
+      
+      "05"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "height"        "100 200 300 400"
+      }
+    }
+  }
+  
+//-------------------
+// Dummy stuff
+//-------------------
+  
+  "dummy_unit"
+  {
+    "AbilityBehavior"     "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+    "MaxLevel"                      "1"
+    
+    "Modifiers"
+    {
+      "dummy_unit"
+      {
+          "Passive"                        "1"
+          "IsHidden"                        "1"    
+          "States"
+          {
+              "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+              "MODIFIER_STATE_INVULNERABLE"    "MODIFIER_STATE_VALUE_ENABLED"
+              "MODIFIER_STATE_NOT_ON_MINIMAP" "MODIFIER_STATE_VALUE_ENABLED"
+              "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          }
+      }
+    }
+  }
+  
+  "barebones_empty1"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "MaxLevel"            "0"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+  }
+  
+  "barebones_empty2"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "MaxLevel"            "0"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+  }
+  
+  "barebones_empty3"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "MaxLevel"            "0"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+  }
+  
+  "barebones_empty4"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "MaxLevel"            "0"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+  }
+  
+  "barebones_empty5"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "MaxLevel"            "0"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+  }
+  
+  "barebones_empty6"
+  {
+    // General
+    //-------------------------------------------------------------------------------------------------------------
+    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "MaxLevel"            "0"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"            "rubick_empty1"
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  ///                               GOOFY ABILITY 1                                       ////
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  "goofy_drop_coin"
+  {
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"      "alchemist_goblins_greed"
+
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastPoint"        "0.0"
+    "AbilityCooldown"       "60.0"
+    
+    "precache"
+    {
+      "Model"             "models/props_gameplay/gold_coin001.vmdl"
+      "soundfile" "soundevents/game_sounds_custom.vsndevts"
+    }
+
+    // Item Info
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "300"
+    
+    "OnSpellStart"
+    {
+      "FireSound"
+      {
+        "EffectName"    "goofydropper"
+        "Target"      "CASTER"
+      }
+      
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/dropcoin.lua"
+        "Function"    "dropcoin"
+      }
+    }
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  ///                               GOOFY ABILITY 2                                       ////
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  "goofy_tumble"
+  {
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"      "goofy_tumble"
+
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastPoint"        "0.0"
+    "AbilityCooldown"       "10.0"
+    
+    "precache"
+    {
+      "soundfile" "soundevents/game_sounds_custom.vsndevts"
+    }
+
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"      "FIELD_INTEGER"
+        "distance"      "1000 1200 1400 1600"
+      }
+      "02"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "duration"    "0.5 0.5 0.4 0.4"
+      }
+      "03"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "stun_radius"    "100.0 100.0 100.0 100.0"
+      }
+    }
+
+    // Item Info
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "50 70 90 110"
+    
+    "OnSpellStart"
+    {
+      "FireSound"
+      {
+        "EffectName"    "cartoonfall"
+        "Target"      "CASTER"
+      }
+
+      "FireSound"
+      {
+        "EffectName"    "goofyscream"
+        "Target"      "CASTER"
+      }
+      
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/goofytumble.lua"
+        "Function"    "roll"
+        "rollmodifier" "modifier_roll"
+      }
+    }
+
+    "Modifiers"
+    {
+      "modifier_roll"
+      {
+        "Passive"       "0"
+        "IsHidden"        "1"
+        "IsBuff"        "1"
+        "IsPurgable"      "0"
+        
+        "States"
+        {
+          "MODIFIER_STATE_NO_UNIT_COLLISION"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE"       "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_COMMAND_RESTRICTED" "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  ///                               GOOFY ABILITY 3                                       ////
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  "goofy_roar"
+  {
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"      "goofylaughing"
+
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastPoint"        "0.0"
+    "AbilityCooldown"       "40.0"
+
+    "AbilityUnitTargetTeam" "DOTA_UNIT_TARGET_TEAM_ENEMY"
+    "AbilityUnitTargetType" "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+
+    // Item Info
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "50 70 90 110"
+
+    "AbilityCastRange"       "1000 1200 1400 1600"
+    "AbilityChannelTime"      "5.0 6.0 7.0 8.0"
+    "AbilityUnitDamageType"     "DAMAGE_TYPE_PURE"
+    "AbilityCastAnimation"      "ACT_DOTA_DISABLED"
+    "AbilityDamage"         "10 12 14 16"
+    "AbilityDuration" "5 6 7 8"
+    
+    "precache"
+    {
+      "soundfile" "soundevents/game_sounds_custom.vsndevts"
+      "soundfile"   "soundevents/game_sounds_heroes/game_sounds_bane.vsndevts"    
+      "particle"    "particles/units/heroes/hero_bane/bane_nightmare.vpcf"
+    }
+
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"      "FIELD_INTEGER"
+        "area"      "1000 1200 1400 1600"
+      }
+      "02"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "duration"    "5 6 7 8"
+      }
+      "03"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "damage"    "10 12 14 16"
+      }
+    }
+   
+    "OnSpellStart"
+    {
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/goofylaugh.lua"
+        "Function"    "laughsound"
+        "soundname"   "goofylaugh"
+      }
+        "ApplyModifier"
+        {
+            "Target"
+            {
+                "Center"    "CASTER"
+                "Radius"    "%area"
+
+                "Teams"  "DOTA_UNIT_TARGET_TEAM_ENEMY"
+
+                "Types"  "DOTA_UNIT_TARGET_ALL"
+            }
+            "ModifierName" "modifier_laughing"
+        }
+    }
+    "OnChannelFinish"
+    {
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/goofylaugh.lua"
+        "Function"    "stoplaughsound"
+        "soundname"   "goofylaugh"
+      }
+        "RemoveModifier"
+        {
+          "Target"
+          {
+              "Center"    "CASTER"
+              "Radius"    "%area"
+
+              "Teams"  "DOTA_UNIT_TARGET_TEAM_ENEMY"
+
+              "Types"  "DOTA_UNIT_TARGET_ALL"
+          }
+          "ModifierName" "modifier_laughing"
+        }
+    }
+    "OnChannelInterrupted"
+    {
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/goofylaugh.lua"
+        "Function"    "stoplaughsound"
+        "soundname"   "goofylaugh"
+      }
+
+      "RemoveModifier"
+      {
+          "Target"
+          {
+              "Center"    "CASTER"
+              "Radius"    "%area"
+
+              "Teams"  "DOTA_UNIT_TARGET_TEAM_ENEMY"
+
+              "Types"  "DOTA_UNIT_TARGET_ALL"
+      
+          }
+          "ModifierName" "modifier_laughing"
+      }
+    }
+
+    "Modifiers" 
+    { 
+      "modifier_laughing" 
+      {
+        "FireSound"
+        {
+          "EffectName"  "Hero_Bane.Nightmare.Loop"
+          "Target"    "TARGET"
+        }
+
+        "IsDebuff" "1"
+        "EffectName"        "particles/units/heroes/hero_bane/bane_nightmare.vpcf"
+        "EffectAttachType"      "follow_overhead"
+        "OverrideAnimation"     "ACT_DOTA_FLAIL"
+
+        "ThinkInterval" "1.0"
+        "OnIntervalThink"
+        {
+          "Damage"
+          {
+              "Target" "TARGET"
+              "Type"   "DAMAGE_TYPE_PURE"
+              "Damage" "%damage"
+          }
+          "Heal"
+          {
+              "HealAmount" "%damage"
+              "Target" "CASTER"
+          }
+        }
+        "States"
+        {
+          "MODIFIER_STATE_NIGHTMARED"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_STUNNED"            "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_SPECIALLY_DENIABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_LOW_ATTACK_PRIORITY"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  ///                               GOOFY ABILITY 4                                       ////
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  "goofy_song"
+  {
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+    "BaseClass"           "ability_datadriven"
+    "AbilityTextureName"      "goofysong"
+
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastPoint"        "0.0"
+    "AbilityCooldown"       "80.0 90.0 100.0"
+    "AbilityType"           "DOTA_ABILITY_TYPE_ULTIMATE"
+
+    "AbilityUnitTargetTeam" "DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+    "AbilityUnitTargetType" "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+
+    // Item Info
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "70 90 110"
+
+    "AbilityCastRange"       "1000 1200 1400"
+    "AbilityDuration" "12 15 18"
+    
+    "precache"
+    {
+      "soundfile" "soundevents/game_sounds_custom.vsndevts"
+      "particle"    "particles/units/heroes/hero_witchdoctor/witchdoctor_voodoo_restoration.vpcf"
+      "particle"    "particles/units/heroes/hero_witchdoctor/witchdoctor_voodoo_restoration_flame.vpcf"
+    }
+
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"      "FIELD_INTEGER"
+        "area"      "1000 1200 1400"
+      }
+      "02"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "duration"    "12 15 18"
+      }
+      "03"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "attackspeed_bonus"    "40 60 80"
+      }
+      "04"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "movespeed_bonus_percentage"    "10 20 30"
+      }
+      "05"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "agi_bonus"    "10 20 30"
+      }
+      "06"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "int_bonus"    "10 20 30"
+      }
+      "07"
+      {
+        "var_type"      "FIELD_FLOAT"
+        "str_bonus"    "10 20 30"
+      }
+    }
+   
+    "OnSpellStart"
+    {
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/goofy_song.lua"
+        "Function"    "songsound"
+        "soundname"   "goofylaughlong"
+      }
+
+      "RunScript"
+      {
+        "ScriptFile"  "heroes/hero_goofy/goofy_song.lua"
+        "Function"    "spreadmodifier"
+        "modifiername"   "modifier_song"
+        "Particle"  "particles/units/heroes/hero_witchdoctor/witchdoctor_voodoo_restoration.vpcf"
+      }
+    }
+
+    "Modifiers" 
+    { 
+      "modifier_song" 
+      {
+        "OnCreated"
+        {
+          "AttachEffect"
+          {
+            "EffectName"    "particles/units/heroes/hero_witchdoctor/witchdoctor_voodoo_restoration_flame.vpcf"
+            "EffectAttachType"  "follow_origin"
+            "Target"      "CASTER"
+            "ControlPoints"
+            {
+              "00" "0 0 0"
+              "01" "%radius %radius %radius"
+            }
+          }
+        }
+
+        "Isbuff" "1"
+
+        "StatusEffectName"     "particles/status_fx/status_effect_bloodrage.vpcf"
+        "StatusEffectPriority" "10"
+
+        "Properties"
+        {
+            "MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT" "%attackspeed_bonus"
+            "MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%movespeed_bonus_percentage"
+            "MODIFIER_PROPERTY_STATS_AGILITY_BONUS"         "%agi_bonus"
+            "MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"       "%int_bonus"
+            "MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"        "%str_bonus"
+        }
+
+        "States"
+        {
+          "MODIFIER_STATE_NOT_ON_MINIMAP_FOR_ENEMIES"    "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+
+  "dota_ability_throw_coin"
+  {
+    "BaseClass"             "ability_datadriven"
+    "AbilityName"           "dota_ability_throw_coin"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+    "AbilityCastAnimation"        "ACT_DOTA_CAST_ABILITY_1"
+    "AbilityCastPoint"          "1.5"
+
+    "OnSpellStart"
+    {
+      "RunScript"
+      {
+        "ScriptFile"      "overboss.lua"
+        "Function"        "ThrowCoin"
+      }
+    }
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_throw_coin"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+  
+  "dota_ability_throw_coin_long"
+  {
+    "BaseClass"             "ability_datadriven"
+    "AbilityName"           "dota_ability_throw_coin_long"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+    "AbilityCastAnimation"        "ACT_DOTA_CAST_ABILITY_2"
+    "AbilityCastPoint"          "2.5"
+
+    "OnSpellStart"
+    {
+      "RunScript"
+      {
+        "ScriptFile"      "overboss.lua"
+        "Function"        "ThrowCoin"
+      }
+    }
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_throw_coin"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+  
+  "dota_ability_celebrate"
+  {
+    "BaseClass"             "ability_datadriven"
+    "AbilityName"           "dota_ability_celebrate"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+    "AbilityCastAnimation"        "ACT_DOTA_CAST_ABILITY_3"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_celebrate"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+
+  "dota_ability_vision_revealer"
+  {
+    "BaseClass"                   "ability_datadriven"
+    "AbilityName"                 "dota_ability_vision_revealer"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_vision_revealer"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "States"
+        {
+          "MODIFIER_STATE_PROVIDES_VISION"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_UNSELECTABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"    "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+
+  "dota_ability_xp_granter"
+  {
+    "BaseClass"                   "ability_datadriven"
+    "AbilityName"                 "dota_ability_xp_granter"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_xp_granter"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "Aura"          "modifier_get_xp"
+        "Aura_Radius"     "800"
+        "Aura_Teams"      "DOTA_UNIT_TARGET_TEAM_BOTH"
+        "Aura_Types"      "DOTA_UNIT_TARGET_HERO"
+        "Aura_ApplyToCaster"  "0"
+        "Aura_Flags"        "DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS"
+
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+
+        "ThinkInterval" ".5"
+
+        "OnIntervalThink"
+        {
+          "GrantXPGold"
+          {
+            "Target"
+            {
+              "Center"    "CASTER"
+              "radius"    "1000"
+              "Types"     "DOTA_UNIT_TARGET_HERO"
+              "Flags"     "DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS"
+            }
+            "XPAmount"    "8"
+            "SplitEvenly" "0"
+            "GoldAmount"  "4"
+            "ReliableGold"  "0"
+          }
+        }
+      }
+
+      "modifier_get_xp"
+      {
+        "Passive"       "1"
+        "EffectName"  ""
+        "TextureName" "custom_games_xp_coin"
+      }
+    }
+  }
+
+  "dota_ability_xp_granter2"
+  {
+    "BaseClass"                   "ability_datadriven"
+    "AbilityName"                 "dota_ability_xp_granter"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_xp_granter"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "Aura"          "modifier_get_xp"
+        "Aura_Radius"     "1400"
+        "Aura_Teams"      "DOTA_UNIT_TARGET_TEAM_BOTH"
+        "Aura_Types"      "DOTA_UNIT_TARGET_HERO"
+        "Aura_ApplyToCaster"  "0"
+        "Aura_Flags"        "DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS"
+
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+
+        "ThinkInterval" ".5"
+
+        "OnIntervalThink"
+        {
+          "GrantXPGold"
+          {
+            "Target"
+            {
+              "Center"    "CASTER"
+              "radius"    "1400"
+              "Types"     "DOTA_UNIT_TARGET_HERO"
+              "Flags"     "DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS"
+            }
+            "XPAmount"    "16"
+            "SplitEvenly" "0"
+            "GoldAmount"  "10"
+            "ReliableGold"  "0"
+          }
+        }
+      }
+
+      "modifier_get_xp"
+      {
+        "Passive"       "1"
+        "EffectName"  ""
+        "TextureName" "custom_games_xp_coin"
+      }
+    }
+  }
+
+  "dota_ability_xp_global"
+  {
+    "BaseClass"                   "ability_datadriven"
+    "AbilityName"                 "dota_ability_xp_global"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_xp_global"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "Aura"          "modifier_get_xp_global"
+        "Aura_Radius"     "8000"
+        "Aura_Teams"      "DOTA_UNIT_TARGET_TEAM_BOTH"
+        "Aura_Types"      "DOTA_UNIT_TARGET_HERO"
+        "Aura_ApplyToCaster"  "0"
+        "Aura_Flags"        "DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS"
+
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE" "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"  "MODIFIER_STATE_VALUE_ENABLED"
+        }
+
+        "ThinkInterval" ".5"
+
+        "OnIntervalThink"
+        {
+          "GrantXPGold"
+          {
+            "Target"
+            {
+              "Center"    "CASTER"
+              "radius"    "3400"
+              "Types"     "DOTA_UNIT_TARGET_HERO"
+              "Flags"     "DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS"
+            }
+            "XPAmount"    "6"
+            "SplitEvenly" "0"
+            "GoldAmount"  "4"
+            "ReliableGold"  "0"
+          }
+        }
+      }
+
+      "modifier_get_xp_global"
+      {
+        "Passive"       "1"
+        "EffectName"  "particles/econ/courier/courier_greevil_yellow/courier_greevil_yellow_ambient_3_b.vpcf"
+        "TextureName" "alchemist_goblins_greed"
+      }
+    }
+  }
+
+  "dota_ability_reveal_invis"
+    {
+           "BaseClass"              "ability_datadriven"
+           "AbilityName"            "dota_ability_reveal_invis"
+           "AbilityBehavior"          "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+           "Modifiers"
+           {
+                "modifier_dota_ability_reveal_invis"
+                {
+                     "IsHidden"         "1"
+                     "Passive"          "1"
+                     
+                     "Aura"           "modifier_invis_revealed"
+                     "Aura_Radius"        "350"
+                     "Aura_Teams"       "DOTA_UNIT_TARGET_TEAM_BOTH"
+                     "Aura_Types"       "DOTA_UNIT_TARGET_ALL"
+                     "Aura_Flags"       "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+
+                     "States"
+                     {
+                           "MODIFIER_STATE_UNSELECTABLE"    "MODIFIER_STATE_VALUE_ENABLED"
+                           "MODIFIER_STATE_NO_HEALTH_BAR"   "MODIFIER_STATE_VALUE_ENABLED"
+                           "MODIFIER_STATE_INVULNERABLE"    "MODIFIER_STATE_VALUE_ENABLED"
+                           "MODIFIER_STATE_OUT_OF_GAME" "MODIFIER_STATE_VALUE_ENABLED"
+                     }
+                }
+
+                "modifier_invis_revealed"
+                {
+                     "Passive"          "1"
+                     "TextureName"        "item_gem"
+                     "Priority"         "MODIFIER_PRIORITY_HIGH"
+                     "States"
+                     {
+                           "MODIFIER_STATE_INVISIBLE"     "MODIFIER_STATE_VALUE_DISABLED"
+                     }
+                }
+           }
+    }
+
+  /=================================================================================================================
+  // Ability: Treasure Courier
+  //=================================================================================================================
+  "dota_ability_treasure_courier"
+  {
+    "BaseClass"                   "ability_datadriven"
+    "AbilityName"                 "dota_ability_health_granter"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_treasure_courier"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "Aura"          ""
+        "Aura_Radius"     "600"
+        "Aura_Teams"      "DOTA_UNIT_TARGET_TEAM_BOTH"
+        "Aura_Types"      "DOTA_UNIT_TARGET_HERO"
+        "Aura_ApplyToCaster"  "0"
+
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_UNIT_COLLISION"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_ATTACK_IMMUNE"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_MAGIC_IMMUNE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"    "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  }
+
+  //=================================================================================================================
+  // Ability: Dummy
+  //=================================================================================================================
+  "dota_ability_dummy"
+  {
+    "BaseClass"                   "ability_datadriven"
+    "AbilityName"                 "dota_ability_dummy"
+    "AbilityBehavior"         "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+    "Modifiers"
+    {
+      "modifier_dota_ability_dummy"
+      {
+        "IsHidden"        "1"
+        "Passive"       "1"
+        
+        "States"
+        {
+          //"MODIFIER_STATE_INVULNERABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_UNSELECTABLE"   "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NOT_ON_MINIMAP"   "MODIFIER_STATE_VALUE_ENABLED"
+          //"MODIFIER_STATE_NO_UNIT_COLLISION"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_ATTACK_IMMUNE"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_MAGIC_IMMUNE"   "MODIFIER_STATE_VALUE_ENABLED"
+        }
+      }
+    }
+  } 
+  //=================================================================================================================
+  // Ability: Traps
+  //=================================================================================================================
+  "trap_unselectable"
+    {
+      "AbilityBehavior"        "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+      
+      "BaseClass"             "ability_datadriven"
+      
+      "Modifiers"
+      {
+      "modifier_unselectable"
+      {
+        "Passive" "1"
+        "States"
+        {
+          "MODIFIER_STATE_UNSELECTABLE"     "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_UNIT_COLLISION"    "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NOT_ON_MINIMAP"     "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_PROVIDES_VISION"    "MODIFIER_STATE_VALUE_DISABLED"
+          "MODIFIER_STATE_ROOTED"         "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_DISARMED"       "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_INVULNERABLE"     "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_LOW_ATTACK_PRIORITY"  "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_FLYING"         "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_BLOCK_DISABLED"     "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_NO_HEALTH_BAR"      "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_OUT_OF_GAME"      "MODIFIER_STATE_VALUE_ENABLED"
+          "MODIFIER_STATE_BLIND"          "MODIFIER_STATE_VALUE_ENABLED"
+            }
+          }
+      }
+  }
+  "breathe_fire"
+  {
+    "BaseClass"                 "ability_lua"
+    "ScriptFile"          "breathe_fire"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"          
+
+    // Casting
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "3000"
+    "AbilityCastPoint"        "0"
+
+    // Time   
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCooldown"       "1.5"
+    
+    // Damage.
+    //-------------------------------------------------------------------------------------------------------------
+    
+    // Cost
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "0"
+    
+    // Special  
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "start_radius"      "150"
+      }
+      "02"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "end_radius"      "250"
+      }
+      "03"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "range"         "650"
+      }
+      "04"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "speed"         "1050"
+      }
+      "05"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "fire_damage"     "400"
+      }
+    }
+  }
+
+  "breathe_poison"
+  {
+    "BaseClass"                 "ability_lua"
+    "ScriptFile"          "breathe_poison"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"          
+
+    // Casting
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "3000"
+    "AbilityCastPoint"        "0"
+
+    // Time   
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCooldown"       "3.5"
+    
+    // Damage.
+    //-------------------------------------------------------------------------------------------------------------
+    
+    // Cost
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "0"
+    
+    // Special  
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "start_radius"      "150"
+      }
+      "02"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "end_radius"      "250"
+      }
+      "03"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "range"         "650"
+      }
+      "04"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "speed"         "1200"
+      }
+      "05"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "poison_damage"     "0"
+      }
+      "06"
+      {
+        "var_type"        "FIELD_FLOAT"
+        "duration"        "15.0"
+      }
+      "07"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "strike_damage"     "100"
+      }
+      "08"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "tick_damage"     "100"
+      }
+      "09"
+      {
+        "var_type"        "FIELD_FLOAT"
+        "tick_interval"     "3.0"
+      }
+      "10"
+      {
+        "var_type"        "FIELD_INTEGER"
+        "movement_slow"     "-50"
+      }
+    }
+  }
+
+  "spike_trap"
+  {
+    "BaseClass"                 "ability_lua"
+    "ScriptFile"          "spike_trap"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"          
+
+    // Casting
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "600"
+    "AbilityCastPoint"        "0.45"
+
+    // Time   
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCooldown"       "2"
+    
+    // Damage.
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityDamage"         "150"
+
+    // Cost
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "0"
+    
+    // Special  
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"          "FIELD_INTEGER"
+        "light_strike_array_aoe"  "192"
+      }
+      
+      "02"
+      {
+        "var_type"            "FIELD_FLOAT"
+        "light_strike_array_delay_time" "0.65"
+      }
+            
+      "03"
+      {
+        "var_type"            "FIELD_FLOAT"
+        "light_strike_array_stun_duration"  "1.6"
+      }
+      "04"
+      {
+        "var_type"          "FIELD_INTEGER"
+        "cast_animation"      "12"
+      }
+      "05"
+      {
+        "var_type"          "FIELD_INTEGER"
+        "light_strike_array_damage"     "600"
+      }
+    }
+  }
+  "pendulum_trap"
+  {
+    "BaseClass"                 "ability_lua"
+    "ScriptFile"          "pendulum_trap"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET" 
+    "AbilityUnitTargetTeam"     "DOTA_UNIT_TARGET_TEAM_ENEMY"
+    "AbilityUnitTargetType"     "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"         
+
+    // Casting
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastRange"        "60000"
+    "AbilityCastPoint"        "0"
+
+    // Time   
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCooldown"       "0"
+
+    // Cost
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityManaCost"       "0"
+      
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityModifierSupportValue" "0.0" // Modifier just delays damage
+
+    // Special
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilitySpecial"
+    {
+      "01"
+      {
+        "var_type"          "FIELD_INTEGER"
+        "damage"          "10000"
+      }
+      "02"
+      {
+        "var_type"          "FIELD_INTEGER"
+        "cast_range_scepter"    "60000"
+      }
+      "03"
+      {
+        "var_type"          "FIELD_FLOAT"
+        "damage_delay"        "0"
+      }
+    }
+  }
+}
+
